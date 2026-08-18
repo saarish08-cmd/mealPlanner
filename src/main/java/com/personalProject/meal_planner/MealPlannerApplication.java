@@ -25,13 +25,32 @@ public class MealPlannerApplication {
                 new MealItem("Turkey chili", 310, 26));
 
         //Hardcoded person stats
-        double weight = 70;
+        double weight = 70;   // kg
+        double height = 178;  // cm
+        int age = 19;
+        String sex = "male";  // required input for the formula, same as any real fitness app asks
         String activity = "moderate";
         String goal = "maintain";
-        double activityMultiplier = activity.equals("sedentary") ? 28 : activity.equals("active") ? 38 : 33;
-        double baselineCalories = weight * activityMultiplier;
-        double targetCalories = goal.equals("bulk") ? baselineCalories * 1.15 : goal.equals("cut") ? baselineCalories * 0.85 : baselineCalories;
-        double targetProtein = weight * (goal.equals("maintain") ? 1.6 : 2.0);
+
+        double bmr = sex.equals("male")
+                ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+                : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+
+        double activityMultiplier = switch (activity) {
+            case "sedentary" -> 1.2;
+            case "light" -> 1.375;
+            case "moderate" -> 1.55;
+            case "active" -> 1.725;
+            default -> 1.55;
+        };
+
+        double baselineCalories = bmr * activityMultiplier;
+        double targetCalories = goal.equals("bulk") ? baselineCalories + 500
+                : goal.equals("cut") ? baselineCalories - 500
+                : baselineCalories;
+
+        double proteinPerKg = goal.equals("bulk") ? 1.8 : goal.equals("cut") ? 2.2 : 1.6;
+        double targetProtein = weight * proteinPerKg;
 
         //Maximize total protein
         Collection<LinearConstraint> constraints = new ArrayList<>();
