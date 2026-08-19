@@ -1,10 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Meal Planner</title>
 </head>
 <body>
-$END$
+<h1>Meal Planner</h1>
+<form id="planForm">
+    <label>Weight (kg) <input type="number" id="weight" required></label><br>
+    <label>Height (cm) <input type="number" id="height" required></label><br>
+    <label>Age <input type="number" id="age" required></label><br>
+    <label>Sex
+        <select id="sex">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+    </label><br>
+    <label>Activity level
+        <select id="activity">
+            <option value="sedentary">Sedentary</option>
+            <option value="light">Light</option>
+            <option value="moderate" selected>Moderate</option>
+            <option value="active">Active</option>
+        </select>
+    </label><br>
+    <label>Goal
+        <select id="goal">
+            <option value="bulk">Bulk</option>
+            <option value="maintain" selected>Maintain</option>
+            <option value="cut">Cut</option>
+        </select>
+    </label><br>
+    <button type="submit">Generate my plan</button>
+</form>
+
+<div id="results"></div>
+
+<script>
+    document.getElementById('planForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const payload = {
+            weight: parseFloat(document.getElementById('weight').value),
+            height: parseFloat(document.getElementById('height').value),
+            age: parseInt(document.getElementById('age').value),
+            sex: document.getElementById('sex').value,
+            activity: document.getElementById('activity').value,
+            goal: document.getElementById('goal').value
+        };
+
+        fetch('/generate-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(response => response.json())
+            .then(data => {
+                let html = '<h2>Your plan</h2><ul>';
+                data.items.forEach(item => {
+                    const rounded = Math.round(item.portions*2)/2; //nearest to 0.5
+                    html += `<li>${rounded} ${item.unit}${rounded !== 1 ? 's' : ''} of ${item.name}</li>`;
+                });
+                html += '</ul>';
+                html += `<p>Total calories: ${data.totalCalories.toFixed(0)}</p>`;
+                html += `<p>Total protein: ${data.totalProtein.toFixed(1)}g</p>`;
+                document.getElementById('results').innerHTML = html;
+            });
+    });
+</script>
 </body>
 </html>
