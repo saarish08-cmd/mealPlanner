@@ -1,9 +1,12 @@
 package com.personalProject.meal_planner;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.math3.optim.linear.*;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.PointValuePair;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import jakarta.servlet.http.*;
 
 @RestController
 public class MealPlanController {
@@ -17,9 +20,14 @@ public class MealPlanController {
             new MealItem("Greek yogurt parfait", 220, 15, "cup"),
             new MealItem("Turkey chili", 310, 26, "bowl")
     );
+    private final ProfileRepository profileRepository;
+
+    public MealPlanController(ProfileRepository profileRepository) {
+        this.profileRepository = profileRepository;
+    }
 
     @PostMapping("/generate-plan")
-    public Map<String, Object> generatePlan(@RequestBody MealPlanRequest request) {
+    public Map<String, Object> generatePlan(@RequestBody MealPlanRequest request, HttpServletResponse httpResponse, HttpServletRequest httpRequest) {
         //Calculate BMR using Mifflin-St Jeor equation
         double bmr = request.getSex().equals("male")
                 ? (10 * request.getWeight()) + (6.25 * request.getHeight()) - (5 * request.getAge()) + 5
@@ -93,6 +101,42 @@ public class MealPlanController {
         response.put("items", pickedItems);
         response.put("totalCalories", Math.round(totalCalories * 10.0) / 10.0);
         response.put("totalProtein", Math.round(totalProtein * 10.0) / 10.0);
+
+        //Cookie and Database logic
+        String cookieId = null;
+        //Read Cookie:
+        if(httpRequest.getCookies() != null){ //The request might not have any cookies, so check for null
+            for(Cookie cookie : httpRequest.getCookies()){//Loop through all the cookies sent by the browser
+                if(cookie.getName().equals("profileId"))//When smth named "profileId" is found, save its value
+                    cookieId = cookie.getValue();
+            }
+        }
+
+        //Generate a cookie for new user:
+        if(cookieId != null){
+            cookieId = UUID.randomUUID().toString();//Generates a random string
+            Cookie newCookie = new Cookie("profileId", cookieId);
+            newCookie.setMaxAge(60*60*24*365); //Cookie expires in 1 year
+            newCookie.setPath("/"); //Makes the cookie valid across the website
+            httpResponse.addCookie(newCookie); //Attaches the cookie to user's browser
+        }
+
+        // Fetch existing profile or create a new one:
+        List<Profile> existingProfiles = profileRepository.findByCookieId(cookieId); //Check the database for is the cookie already exists
+        Profile profile = existingProfiles.isEmpty() ? new Profile() : existingProfiles.get(0); //If not, create a new profile with that cookie
+
+        // Add current stats to profile
+        profile.setCookieId(cookieId);
+        profile.setWeight(request.getWeight());
+        profile.setHeight(request.getHeight());
+        profile.setAge(request.getAge());
+        profile.setSex(request.getSex());
+        profile.setActivity(request.getActivity());
+        profile.setGoal(request.getGoal());
+
+        // Save to database
+        profileRepository.save(profile);
+
         return response;
     }
 }
