@@ -2,68 +2,223 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Meal Planner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Macro Plate — Smart Meal Planner</title>
+    <meta name="description" content="Generate a daily meal plan optimized for your calorie and protein targets.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Meal Planner</h1>
-<form id="planForm">
-    <label>Weight (kg) <input type="number" id="weight" required></label><br>
-    <label>Height (cm) <input type="number" id="height" required></label><br>
-    <label>Age <input type="number" id="age" required></label><br>
-    <label>Sex
-        <select id="sex">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select>
-    </label><br>
-    <label>Activity level
-        <select id="activity">
-            <option value="sedentary">Sedentary</option>
-            <option value="light">Light</option>
-            <option value="moderate" selected>Moderate</option>
-            <option value="active">Active</option>
-        </select>
-    </label><br>
-    <label>Goal
-        <select id="goal">
-            <option value="bulk">Bulk</option>
-            <option value="maintain" selected>Maintain</option>
-            <option value="cut">Cut</option>
-        </select>
-    </label><br>
-    <button type="submit">Generate my plan</button>
-</form>
+<div class="glow glow-a" aria-hidden="true"></div>
+<div class="glow glow-b" aria-hidden="true"></div>
 
-<div id="results"></div>
+<header class="topbar">
+    <div class="brand">
+        <span class="brand-mark">MP</span>
+        <span>Macro Plate</span>
+    </div>
+    <span class="pill">Linear-optimized nutrition</span>
+</header>
+
+<main class="shell">
+    <section class="hero">
+        <h1>Eat for your goal,<br><em>calculated</em> not guessed.</h1>
+        <p>Enter your stats and we'll solve for the exact portions that hit your calorie
+            and protein targets from today's menu.</p>
+    </section>
+
+    <div class="layout">
+        <section class="card form-card">
+            <h2 class="card-title">Your details</h2>
+            <form id="planForm" novalidate>
+                <div class="grid">
+                    <div class="field">
+                        <label for="weight">Weight</label>
+                        <div class="input-wrap">
+                            <input type="number" id="weight" step="0.1" min="30" placeholder="75" required>
+                            <span class="suffix">kg</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="height">Height</label>
+                        <div class="input-wrap">
+                            <input type="number" id="height" step="0.1" min="100" placeholder="178" required>
+                            <span class="suffix">cm</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="age">Age</label>
+                        <div class="input-wrap">
+                            <input type="number" id="age" min="13" max="100" placeholder="24" required>
+                            <span class="suffix">yrs</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="sex">Sex</label>
+                        <div class="select-wrap">
+                            <select id="sex">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Activity level</span>
+                    <div class="segment" role="radiogroup" aria-label="Activity level">
+                        <label><input type="radio" name="activity" value="sedentary"><span>Sedentary</span></label>
+                        <label><input type="radio" name="activity" value="light"><span>Light</span></label>
+                        <label><input type="radio" name="activity" value="moderate" checked><span>Moderate</span></label>
+                        <label><input type="radio" name="activity" value="active"><span>Active</span></label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Goal</span>
+                    <div class="goals" role="radiogroup" aria-label="Goal">
+                        <label class="goal">
+                            <input type="radio" name="goal" value="bulk">
+                            <span class="goal-body">
+                                <strong>Bulk</strong>
+                                <small>+500 kcal</small>
+                            </span>
+                        </label>
+                        <label class="goal">
+                            <input type="radio" name="goal" value="maintain" checked>
+                            <span class="goal-body">
+                                <strong>Maintain</strong>
+                                <small>baseline</small>
+                            </span>
+                        </label>
+                        <label class="goal">
+                            <input type="radio" name="goal" value="cut">
+                            <span class="goal-body">
+                                <strong>Cut</strong>
+                                <small>−500 kcal</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="submit" type="submit">
+                    <span class="submit-label">Generate my plan</span>
+                    <span class="spinner" aria-hidden="true"></span>
+                </button>
+                <p class="hint">Uses Mifflin-St Jeor BMR × activity, then solves portions with linear programming.</p>
+            </form>
+        </section>
+
+        <section class="card result-card" id="resultCard" aria-live="polite">
+            <div class="empty" id="emptyState">
+                <div class="empty-icon">🍽️</div>
+                <h3>No plan yet</h3>
+                <p>Fill in your details and your optimized day of food will appear here.</p>
+            </div>
+
+            <div class="results" id="results" hidden>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-label">Calories</span>
+                        <span class="stat-value" id="statCalories">—</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Protein</span>
+                        <span class="stat-value" id="statProtein">—</span>
+                    </div>
+                </div>
+                <h2 class="card-title">Today's plate</h2>
+                <ul class="items" id="items"></ul>
+            </div>
+
+            <div class="error" id="errorState" hidden>
+                <h3>Couldn't build a plan</h3>
+                <p id="errorMessage">Try adjusting your details and generate again.</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer class="footer">Built for precision eating · Macro Plate</footer>
 
 <script>
-    document.getElementById('planForm').addEventListener('submit', function (e) {
+    const form = document.getElementById('planForm');
+    const btn = form.querySelector('.submit');
+    const results = document.getElementById('results');
+    const emptyState = document.getElementById('emptyState');
+    const errorState = document.getElementById('errorState');
+    const errorMessage = document.getElementById('errorMessage');
+    const itemsEl = document.getElementById('items');
+
+    const checked = (name) => form.querySelector(`input[name="${name}"]:checked`).value;
+
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
+        if (!form.reportValidity()) return;
+
         const payload = {
             weight: parseFloat(document.getElementById('weight').value),
             height: parseFloat(document.getElementById('height').value),
             age: parseInt(document.getElementById('age').value),
             sex: document.getElementById('sex').value,
-            activity: document.getElementById('activity').value,
-            goal: document.getElementById('goal').value
+            activity: checked('activity'),
+            goal: checked('goal')
         };
+
+        btn.classList.add('is-loading');
+        btn.disabled = true;
 
         fetch('/generate-plan', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Server responded with ' + response.status);
+                return response.json();
+            })
             .then(data => {
-                let html = '<h2>Your plan</h2><ul>';
-                data.items.forEach(item => {
-                    const rounded = Math.round(item.portions*2)/2; //nearest to 0.5
-                    html += `<li>${rounded} ${item.unit}${rounded !== 1 ? 's' : ''} of ${item.name}</li>`;
+                itemsEl.innerHTML = '';
+                (data.items || []).forEach((item, i) => {
+                    const rounded = Math.round(item.portions * 2) / 2; // nearest 0.5
+                    if (rounded <= 0) return;
+                    const li = document.createElement('li');
+                    li.className = 'item';
+                    li.style.animationDelay = (i * 60) + 'ms';
+                    li.innerHTML = `
+                        <span class="portion">${rounded}</span>
+                        <span class="item-body">
+                            <strong>${item.name}</strong>
+                            <small>${rounded} ${item.unit}${rounded !== 1 ? 's' : ''}</small>
+                        </span>`;
+                    itemsEl.appendChild(li);
                 });
-                html += '</ul>';
-                html += `<p>Total calories: ${data.totalCalories.toFixed(0)}</p>`;
-                html += `<p>Total protein: ${data.totalProtein.toFixed(1)}g</p>`;
-                document.getElementById('results').innerHTML = html;
+
+                if (!itemsEl.children.length) {
+                    const li = document.createElement('li');
+                    li.className = 'item';
+                    li.innerHTML = '<span class="item-body"><strong>No portions returned</strong><small>Try different inputs</small></span>';
+                    itemsEl.appendChild(li);
+                }
+
+                document.getElementById('statCalories').textContent = Math.round(data.totalCalories) + ' kcal';
+                document.getElementById('statProtein').textContent = Number(data.totalProtein).toFixed(1) + ' g';
+
+                emptyState.hidden = true;
+                errorState.hidden = true;
+                results.hidden = false;
+            })
+            .catch(err => {
+                errorMessage.textContent = err.message || 'Something went wrong.';
+                results.hidden = true;
+                emptyState.hidden = true;
+                errorState.hidden = false;
+            })
+            .finally(() => {
+                btn.classList.remove('is-loading');
+                btn.disabled = false;
             });
     });
 </script>
