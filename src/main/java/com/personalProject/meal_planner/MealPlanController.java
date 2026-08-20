@@ -139,4 +139,28 @@ public class MealPlanController {
 
         return response;
     }
+
+    @GetMapping("/profile")
+    public Profile loadProfile(HttpServletRequest httpRequest){
+        //Check for cookies sent by the browser
+        String cookieId = null;
+        if(httpRequest.getCookies() != null){
+            for(Cookie cookie : httpRequest.getCookies()){
+                if(cookie.getName().equals("profileId"))
+                    cookieId = cookie.getValue();
+            }
+        }
+
+        //If a cookie exists, ask the database for their saved stats
+        if(cookieId != null){
+            List<Profile> existingProfiles = profileRepository.findByCookieId(cookieId);
+            //If the data is found, send it to frontend
+            if(!existingProfiles.isEmpty()){
+                return existingProfiles.get(0);
+            }
+        }
+
+        //If no cookie is found or database is empty, return null
+        return null;
+    }
 }
