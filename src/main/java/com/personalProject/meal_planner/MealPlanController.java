@@ -113,7 +113,7 @@ public class MealPlanController {
         }
 
         //Generate a cookie for new user:
-        if(cookieId != null){
+        if(cookieId == null){
             cookieId = UUID.randomUUID().toString();//Generates a random string
             Cookie newCookie = new Cookie("profileId", cookieId);
             newCookie.setMaxAge(60*60*24*365); //Cookie expires in 1 year
