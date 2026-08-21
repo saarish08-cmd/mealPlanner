@@ -25,7 +25,7 @@
 <main class="shell">
     <section class="hero">
         <h1>Eat for your goal,<br><em>calculated</em> not guessed.</h1>
-        <p>Enter your stats and we'll solve for the exact portions that hit your calorie
+        <p>Enter your stats, and we'll solve for the exact portions that hit your calorie
             and protein targets from today's menu.</p>
     </section>
 
@@ -68,11 +68,35 @@
 
                 <div class="field">
                     <span class="label">Activity level</span>
-                    <div class="segment" role="radiogroup" aria-label="Activity level">
-                        <label><input type="radio" name="activity" value="sedentary"><span>Sedentary</span></label>
-                        <label><input type="radio" name="activity" value="light"><span>Light</span></label>
-                        <label><input type="radio" name="activity" value="moderate" checked><span>Moderate</span></label>
-                        <label><input type="radio" name="activity" value="active"><span>Active</span></label>
+                    <div class="goals" role="radiogroup" aria-label="Activity level">
+                        <label class="goal">
+                            <input type="radio" name="activity" value="sedentary">
+                            <span class="goal-body">
+                                <strong>Sedentary</strong>
+                                <small>Desk job, little to no exercise</small>
+                            </span>
+                        </label>
+                        <label class="goal">
+                            <input type="radio" name="activity" value="light">
+                            <span class="goal-body">
+                                <strong>Light</strong>
+                                <small>Light exercise 1-3 days/week</small>
+                            </span>
+                        </label>
+                        <label class="goal">
+                            <input type="radio" name="activity" value="moderate" checked>
+                            <span class="goal-body">
+                                <strong>Moderate</strong>
+                                <small>Moderate exercise 3-5 days/week</small>
+                            </span>
+                        </label>
+                        <label class="goal">
+                            <input type="radio" name="activity" value="active">
+                            <span class="goal-body">
+                                <strong>Active</strong>
+                                <small>Hard exercise 6-7 days/week</small>
+                            </span>
+                        </label>
                     </div>
                 </div>
 
