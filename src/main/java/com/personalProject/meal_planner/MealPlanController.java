@@ -165,6 +165,4 @@ public class MealPlanController {
         //If no cookie is found or database is empty, return null
         return null;
     }
-
-
 }
