@@ -166,22 +166,5 @@ public class MealPlanController {
         return null;
     }
 
-    @GetMapping("/profile")
-    public Profile getProfile(HttpServletRequest httpRequest) {
-        String cookieId = null;
-        if (httpRequest.getCookies() != null) {
-            for (Cookie cookie : httpRequest.getCookies()) {
-                if (cookie.getName().equals("profileId")) {
-                    cookieId = cookie.getValue();
-                }
-            }
-        }
 
-        if (cookieId == null) {
-            return null;
-        }
-
-        List<Profile> matches = profileRepository.findByCookieId(cookieId);
-        return matches.isEmpty() ? null : matches.get(0);
-    }
 }
