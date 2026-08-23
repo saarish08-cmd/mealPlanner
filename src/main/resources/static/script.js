@@ -11,6 +11,26 @@ const checked = (name) => form.querySelector(`input[name="${name}"]:checked`).va
 // --- NEW: PHASE 4 PROFILE AUTO-LOAD ---
 // Runs automatically when the webpage loads
 document.addEventListener("DOMContentLoaded", function() {
+    // --- DARK MODE TOGGLE LOGIC ---
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme');
+
+    // 1. Check for saved preference or OS default on page load
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        if (themeToggle) themeToggle.textContent = '☀️';
+    } else {
+        if (themeToggle) themeToggle.textContent = '🌙';
+    }
+
+    // 2. Listen for clicks on the toggle button
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        });
+    }
     fetch('/profile')
         .then(response => response.text())
         .then(text => {
