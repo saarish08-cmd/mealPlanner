@@ -16,4 +16,9 @@ public class ScrapedMenuItem {
     public String getVenue() {return venue;}
     public String getCategory() {return category;}
     public String getDishName() {return dishName;}
+
+    //toString
+    public String toString(){
+        return venue + " / " + category + " / " + dishName;
+    }
 }

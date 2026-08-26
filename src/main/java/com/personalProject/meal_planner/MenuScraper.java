@@ -28,5 +28,8 @@ public class MenuScraper {
                 }
             }
         }
+
+        //Print
+        items.forEach(System.out::println);
     }
 }
