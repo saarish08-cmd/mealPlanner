@@ -26,4 +26,20 @@ public class MealItem {
     }
 
     public String getUnit() {return unit;}
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCalories(double calories) {
+        this.calories = calories;
+    }
+
+    public void setProtein(double protein) {
+        this.protein = protein;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 }
