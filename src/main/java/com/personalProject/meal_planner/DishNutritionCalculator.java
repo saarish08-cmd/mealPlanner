@@ -31,6 +31,6 @@ public class DishNutritionCalculator {
             System.out.println(ingredient.getName() + " -> " + match.getDescription() + " (" + ingredient.getGrams() + "g)");
         }
 
-        System.out.println(dishName + " TOTAL: " + totalCalories + " kcal, " + totalProtein + "g protein" + totalGrams + " g total weight");
+        System.out.println(dishName + " TOTAL: " + totalCalories + " kcal, " + totalProtein + "g protein, " + totalGrams + " g total weight");
     }
 }
