@@ -17,12 +17,21 @@ public class NutritionApi {
         lookupFood("Southwest Pork Tenderloin");
     }
 
+    // Helper method to fetch the API key from system environment variables
+    private static String getApiKey() {
+        String key = System.getenv("USDA_API_KEY");
+        if (key == null || key.isBlank()) {
+            return "DEMO_KEY";
+        }
+        return key;
+    }
+
     public static void lookupFood(String dishName) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
 
         String encodedQuery = URLEncoder.encode(dishName, StandardCharsets.UTF_8);//Makes it so that dishes with spaces are searched up through a URL in the correct format
-        String url = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query="
-                + encodedQuery + "&dataType=Foundation,SR%20Legacy";
+        String url = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=" + getApiKey()
+                + "&query=" + encodedQuery + "&dataType=Foundation,SR%20Legacy";
 
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

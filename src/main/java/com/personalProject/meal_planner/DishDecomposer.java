@@ -24,7 +24,9 @@ public class DishDecomposer {
 
         // This is the question to the AI.
         String prompt = "List the main ingredients of a typical \"" + dishName +
-                "\" dish, with an estimated gram weight for a standard single serving. " +
+                "\" dish, with an estimated gram weight for ONE realistic cafeteria-style " +
+                "entrée portion — the amount one student would get from a single scoop or " +
+                "serving spoon at a dining hall, NOT a home recipe batch or restaurant-size plate. " +
                 "Respond with ONLY a JSON array, no other text, in this exact format: " +
                 "[{\"name\": \"shrimp\", \"grams\": 120}, {\"name\": \"pasta\", \"grams\": 150}]";
 
