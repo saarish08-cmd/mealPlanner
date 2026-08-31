@@ -13,6 +13,7 @@ public class DishNutritionCalculator {
 
         double totalCalories = 0;
         double totalProtein = 0;
+        double totalGrams = 0;
 
         for (IngredientEstimate ingredient : ingredients) {
             NutritionMatch match = NutritionApi.matchIngredient(ingredient.getName());
@@ -26,10 +27,10 @@ public class DishNutritionCalculator {
             double scale = ingredient.getGrams() / 100.0;
             totalCalories += match.getCaloriesPer100g() * scale;
             totalProtein += match.getProteinPer100g() * scale;
-
+            totalGrams += ingredient.getGrams();
             System.out.println(ingredient.getName() + " -> " + match.getDescription() + " (" + ingredient.getGrams() + "g)");
         }
 
-        System.out.println(dishName + " TOTAL: " + totalCalories + " kcal, " + totalProtein + "g protein");
+        System.out.println(dishName + " TOTAL: " + totalCalories + " kcal, " + totalProtein + "g protein" + totalGrams + " g total weight");
     }
 }
