@@ -27,12 +27,16 @@ public class DishDecomposer {
                 "\" dish, with an estimated gram weight for ONE realistic cafeteria-style " +
                 "entrée portion — the amount one student would get from a single scoop or " +
                 "serving spoon at a dining hall, NOT a home recipe batch or restaurant-size plate. " +
+                "List each ingredient as its own separate entry — never combine two different foods " +
+                "into one item (for example, write \"bell peppers\" and \"onions\" separately, " +
+                "not \"bell peppers and onions\"). " +
                 "Respond with ONLY a JSON array, no other text, in this exact format: " +
                 "[{\"name\": \"shrimp\", \"grams\": 120}, {\"name\": \"pasta\", \"grams\": 150}]";
 
         // The AI needs the question wrapped in a specific JSON shape.
         // toJsonString makes sure the  question text is safe to put inside JSON.
-        String requestBody = "{\"contents\": [{\"parts\": [{\"text\": " + toJsonString(prompt) + "}]}]}";
+        String requestBody = "{\"contents\": [{\"parts\": [{\"text\": " + toJsonString(prompt) + "}]}],"
+                + "\"generationConfig\": {\"temperature\": 0.2}}";
 
         // This builds the actual request
         HttpRequest request = HttpRequest.newBuilder()

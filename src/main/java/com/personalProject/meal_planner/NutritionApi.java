@@ -23,7 +23,7 @@ public class NutritionApi {
         if (key == null || key.isBlank()) {
             return "DEMO_KEY";
         }
-        return key;
+        return null;
     }
 
     public static void lookupFood(String dishName) throws Exception {
@@ -71,7 +71,6 @@ public class NutritionApi {
 
         // Uses USDA_API_KEY if set, otherwise falls back to DEMO_KEY
         String apiKey = System.getenv("USDA_API_KEY");
-        System.out.println("DEBUG - USDA Key Loaded: " + (apiKey == null ? "NULL (Using DEMO_KEY)" : apiKey));
         if (apiKey == null || apiKey.isBlank()) {
             apiKey = "DEMO_KEY";
         }
