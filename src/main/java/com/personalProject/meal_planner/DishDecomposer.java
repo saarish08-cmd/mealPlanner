@@ -49,23 +49,6 @@ public class DishDecomposer {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
-        /*cooked pasta -> Pasta, cooked, enriched, with added salt (140.0g)
-        cooked shrimp -> Crustaceans, shrimp, cooked (60.0g)
-        cooked cajun cream sauce -> Guava sauce, cooked (70.0g)
-        cooked red bell peppers -> Peppers, sweet, red, cooked, boiled, drained, with salt (15.0g)
-        cooked green bell peppers -> Peppers, sweet, green, cooked, boiled, drained, with salt (15.0g)
-        cooked onions -> Onions, cooked, boiled, drained, with salt (15.0g)
-        Cajun Shrimp Pasta TOTAL: 318.49999999999994 kcal, 23.224g protein, 315.0 g total weight
-
-        cooked penne pasta -> Pasta, cooked, enriched, with added salt (180.0g)
-cooked shrimp -> Crustaceans, shrimp, cooked (75.0g)
-Cajun cream sauce -> Cream, fluid, light (coffee cream or table cream) (85.0g)
-cooked red bell peppers -> Peppers, sweet, red, cooked, boiled, drained, with salt (20.0g)
-cooked green bell peppers -> Peppers, sweet, green, cooked, boiled, drained, with salt (20.0g)
-cooked onions -> Onions, cooked, boiled, drained, with salt (15.0g)
-grated parmesan cheese -> Cheese, parmesan, grated (5.0g)
-Cajun Shrimp Pasta TOTAL: 560.3000000000001 kcal, 32.948g protein, 400.0 g total weight*/
-
         // This sends the request to AI
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

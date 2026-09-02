@@ -6,6 +6,8 @@ import java.net.http.HttpResponse;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.JsonNode;
 
@@ -64,10 +66,25 @@ public class NutritionApi {
         }
     }
 
+    // Skip results that look like a branded/restaurant item, not a plain ingredient.
+    private static boolean looksLikeBrand(String description) {
+        for (String word : description.split("\\s+")) {
+            String cleaned = word.replaceAll("[^A-Za-z]", "");
+            if (cleaned.length() > 2 && cleaned.equals(cleaned.toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Finds the single best real match for one plain ingredient name
     public static NutritionMatch matchIngredient(String ingredientName) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         String encodedQuery = URLEncoder.encode(ingredientName, StandardCharsets.UTF_8);
+
+        if (ingredientName.toLowerCase().contains("seasoning") || ingredientName.toLowerCase().contains("spice")) {
+            return null;
+        }
 
         // Uses USDA_API_KEY if set, otherwise falls back to DEMO_KEY
         String apiKey = System.getenv("USDA_API_KEY");
@@ -120,6 +137,7 @@ public class NutritionApi {
             }
 
             if (calories == -1 || protein == -1) continue;
+            if (looksLikeBrand(description)) continue;
             return new NutritionMatch(fdcId, description, calories, protein);
         }
 
