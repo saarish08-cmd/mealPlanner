@@ -19,4 +19,5 @@ public class DishNutritionResult {
     public String toString() {
         return totalCalories + " kcal, " + totalProtein + "g protein, " + totalGrams + "g total";
     }
+
 }
