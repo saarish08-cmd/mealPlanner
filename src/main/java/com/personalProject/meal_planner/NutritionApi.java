@@ -44,6 +44,22 @@ public class NutritionApi {
 
         System.out.println("=== " + dishName + " (" + foods.size() + " candidates) ===");
 
+        /*ooked pasta -> Pasta, cooked, enriched, with added salt (130.0g)
+cooked shrimp -> Crustaceans, shrimp, cooked (60.0g)
+cajun cream sauce -> Cream, fluid, light (coffee cream or table cream) (65.0g)
+cooked bell peppers -> Peppers, sweet, green, cooked, boiled, drained, with salt (20.0g)
+cooked onions -> Onions, cooked, boiled, drained, with salt (15.0g)
+grated parmesan cheese -> Cheese, parmesan, grated (10.0g)
+Cajun Shrimp Pasta TOTAL: 443.75 kcal, 27.092g protein, 300.0 g total weight
+
+cooked penne pasta -> Pasta, cooked, enriched, with added salt (140.0g)
+cooked shrimp -> Crustaceans, shrimp, cooked (50.0g)
+cajun cream sauce -> Cream, fluid, light (coffee cream or table cream) (60.0g)
+cooked bell peppers -> Peppers, sweet, green, cooked, boiled, drained, with salt (20.0g)
+cooked onions -> Onions, cooked, boiled, drained, with salt (15.0g)
+No match for: cajun seasoning (skipped)
+Cajun Shrimp Pasta TOTAL: 397.79999999999995 kcal, 22.284g protein, 285.0 g total weight
+*/
         for (JsonNode food : foods) {
             String description = food.get("description").asText();
             int fdcId = food.get("fdcId").asInt();
