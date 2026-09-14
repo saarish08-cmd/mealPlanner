@@ -21,7 +21,7 @@ public class DishNutritionCalculator {
 
     public static void main(String[] args) throws Exception {
         System.out.println(getForDish("Cajun Shrimp Pasta"));
-        System.out.println(getForDish("Cajun Shrimp Pasta")); // should be instant, no AI/USDA calls
+        System.out.println(getForDish("Cajun Shrimp Pasta"));
     }
 
     // Calculates total calories/protein for one dish, ingredient by ingredient.
