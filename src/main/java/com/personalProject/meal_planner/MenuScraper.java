@@ -6,6 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class MenuScraper {
     public static void main(String[] args) throws IOException {
@@ -15,7 +17,8 @@ public class MenuScraper {
     // Pulls today's real menu from the site and returns it as a list.
     // Other files can call this instead of copying the scraping logic.
     public static List<ScrapedMenuItem> scrapeMenu() throws IOException {
-        String url = "https://uwaterloo.ca/food-services-information/content/daily-menu-2026-09-14"; // update the date as needed
+        String today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String url = "https://uwaterloo.ca/food-services-information/content/daily-menu-" + today; // update the date as needed
 
         Document doc = Jsoup.connect(url).get();
         Elements locations = doc.select("div.card__food-location");
