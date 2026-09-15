@@ -14,14 +14,18 @@ public class MenuScraper {
         scrapeMenu().forEach(System.out::println);
     }
 
-    // Pulls today's real menu from the site and returns it as a list.
-    // Other files can call this instead of copying the scraping logic.
     public static List<ScrapedMenuItem> scrapeMenu() throws IOException {
         String today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
-        String url = "https://uwaterloo.ca/food-services-information/content/daily-menu-" + today; // update the date as needed
+        String url = "https://uwaterloo.ca/food-services-information/content/daily-menu-" + today;
+
+        System.out.println("Fetched: " + url);
 
         Document doc = Jsoup.connect(url).get();
+        System.out.println("Page title: " + doc.title());
+
         Elements locations = doc.select("div.card__food-location");
+        System.out.println("Venues found: " + locations.size());
+
         List<ScrapedMenuItem> items = new ArrayList<>();
 
         for (Element venue : locations) {
