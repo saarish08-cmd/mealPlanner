@@ -16,6 +16,7 @@ public class MenuScraper {
 
     public static List<ScrapedMenuItem> scrapeMenu() throws IOException {
         String today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        //Test if the issue is truly in the scraper or a helper class
         String url = "https://uwaterloo.ca/food-services-information/content/daily-menu-" + today;
 
         System.out.println("Fetched: " + url);
