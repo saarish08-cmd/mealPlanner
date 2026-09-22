@@ -15,7 +15,7 @@ public class MenuScraper {
     }
 
     public static List<ScrapedMenuItem> scrapeMenu() throws IOException {
-        String today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE;
+        String today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
         String url = "https://uwaterloo.ca/food-services/daily-menu?date=" + today;
         System.out.println("Fetched: " + url);
 
