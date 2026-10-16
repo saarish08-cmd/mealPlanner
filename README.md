@@ -2,7 +2,7 @@
 
 A Java / Spring Boot tool that was meant to build dining hall meal plans for University of Waterloo residence students, hitting a calorie and protein target using the real daily menu.
 
-**Status: discontinued, October 2026.** The code is published as a record of the work and what I learned. **Please do not use it to make health or diet decisions.** The reasons are below.
+**Status: discontinued** The code is published as a record of the work and what I learned. **Please do not use it to make health or diet decisions.** The reasons are below.
 
 ## What it was meant to do
 
